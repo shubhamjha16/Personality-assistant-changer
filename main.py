@@ -1,13 +1,17 @@
 import os
 import gradio as gr
 from speech_to_text import record_audio, transcribe_with_groq
-from ai_agent import ask_agent
+from ai_agent import ask_agent, set_custom_prompt
 from text_to_speech import text_to_speech_with_elevenlabs, text_to_speech_with_gtts
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 audio_filepath = "audio_question.mp3"
 
-def process_audio_and_chat():
+def process_audio_and_chat(personality, custom_prompt=""):
+    # Handle custom personality
+    if personality.lower() == "custom" and custom_prompt.strip():
+        set_custom_prompt(custom_prompt.strip())
+    
     chat_history = []
     while True:
         try:
@@ -17,7 +21,7 @@ def process_audio_and_chat():
             if "goodbye" in user_input.lower():
                 break
 
-            response = ask_agent(user_query=user_input)
+            response = ask_agent(user_query=user_input, personality=personality)
 
             voice_of_doctor = text_to_speech_with_elevenlabs(input_text=response, output_filepath="final.mp3")
 
@@ -28,6 +32,10 @@ def process_audio_and_chat():
         except Exception as e:
             print(f"Error in continuous recording: {e}")
             break
+
+def toggle_custom_prompt(personality):
+    """Show/hide custom prompt input based on personality selection."""
+    return gr.update(visible=(personality == "Custom"))
 
 # Code for frontend
 import cv2
@@ -95,6 +103,23 @@ def get_webcam_frame():
 
 with gr.Blocks() as demo:
     gr.Markdown("<h1 style='color: orange; text-align: center;  font-size: 4em;'> 👧🏼 Dora – Your Personal AI Assistant</h1>")
+    
+    # Personality Selector
+    with gr.Row():
+        personality_selector = gr.Dropdown(
+            choices=["General Assistant", "Doctor", "Lawyer", "Receptionist", "Teacher", "Chef", "Custom"],
+            value="General Assistant",
+            label="Assistant Personality",
+            info="Select what kind of assistant you need"
+        )
+    
+    # Custom prompt input (initially hidden)
+    custom_prompt_input = gr.Textbox(
+        label="Custom Personality Description",
+        placeholder="Describe the personality you want (e.g., 'a helpful business consultant who specializes in marketing strategies')",
+        visible=False,
+        lines=3
+    )
 
     with gr.Row():
         # Left column - Webcam
@@ -153,9 +178,31 @@ with gr.Blocks() as demo:
         outputs=chatbot
     )
     
+    # Show/hide custom prompt when personality changes
+    personality_selector.change(
+        fn=toggle_custom_prompt,
+        inputs=personality_selector,
+        outputs=custom_prompt_input
+    )
+    
+    # Restart continuous mode when personality changes
+    personality_selector.change(
+        fn=process_audio_and_chat,
+        inputs=[personality_selector, custom_prompt_input],
+        outputs=chatbot
+    )
+    
+    # Update when custom prompt changes
+    custom_prompt_input.change(
+        fn=process_audio_and_chat,
+        inputs=[personality_selector, custom_prompt_input],
+        outputs=chatbot
+    )
+    
     # Auto-start continuous mode when the app loads
     demo.load(
         fn=process_audio_and_chat,
+        inputs=[personality_selector, custom_prompt_input],
         outputs=chatbot
     )
 
