@@ -1,11 +1,9 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langgraph.prebuilt import create_react_agent
-from dotenv import load_dotenv
-from tools import analyze_image_with_query
+#!/usr/bin/env python3
+"""
+Simple test to verify the personality assistant functionality works.
+"""
 
-
-load_dotenv()
-
+# Test just the prompt generation function without external dependencies
 def generate_system_prompt(personality_type="general assistant"):
     """Generate a dynamic system prompt based on the specified personality type."""
     
@@ -48,36 +46,48 @@ def generate_system_prompt(personality_type="general assistant"):
         {base_instructions}
         Your job is to embody the characteristics and expertise of a {personality_type} while making every interaction feel smart, snappy, and personable."""
 
-
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
-    temperature=0.7,
-)
-
-def ask_agent(user_query: str, personality_type: str = "general assistant") -> str:
-    """
-    Ask the agent a question with a specific personality type.
+def test_personality_prompts():
+    """Test that different personalities generate different prompts"""
+    print("Testing personality prompt generation...")
     
-    Args:
-        user_query: The user's question
-        personality_type: The type of assistant (doctor, lawyer, receptionist, etc.)
+    # Test predefined personalities with expected keywords
+    personality_keywords = {
+        "doctor": "medical",
+        "lawyer": "legal",
+        "receptionist": "receptionist",
+        "teacher": "educational",
+        "therapist": "therapeutic"
+    }
     
-    Returns:
-        The agent's response
-    """
-    system_prompt = generate_system_prompt(personality_type)
+    for personality, expected_keyword in personality_keywords.items():
+        prompt = generate_system_prompt(personality)
+        print(f"\n--- {personality.upper()} PERSONALITY ---")
+        print(prompt[:200] + "..." if len(prompt) > 200 else prompt)
+        
+        # Basic assertion that the expected keyword is mentioned in the prompt
+        assert expected_keyword.lower() in prompt.lower(), f"Expected keyword '{expected_keyword}' not found in {personality} prompt"
     
-    agent = create_react_agent(
-        model=llm,
-        tools=[analyze_image_with_query],
-        prompt=system_prompt
-        )
+    # Test custom personality
+    custom_personality = "software engineer"
+    custom_prompt = generate_system_prompt(custom_personality)
+    print(f"\n--- CUSTOM PERSONALITY: {custom_personality.upper()} ---")
+    print(custom_prompt[:200] + "..." if len(custom_prompt) > 200 else custom_prompt)
+    
+    assert custom_personality.lower() in custom_prompt.lower(), f"Custom personality '{custom_personality}' not found in prompt"
+    
+    print("\n✅ All personality prompt tests passed!")
 
-    input_messages = {"messages": [{"role": "user", "content": user_query}]}
-
-    response = agent.invoke(input_messages)
-
-    return response['messages'][-1].content
-
-
-#print(ask_agent(user_query="Do I have a beard?"))
+if __name__ == "__main__":
+    print("🧪 Running Personality Assistant Tests")
+    print("=" * 50)
+    
+    try:
+        test_personality_prompts()
+        
+        print("\n🎉 All tests passed!")
+        print("The personality assistant prompt generation is working correctly.")
+        
+    except Exception as e:
+        print(f"\n❌ Test failed: {e}")
+        import sys
+        sys.exit(1)
