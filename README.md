@@ -12,15 +12,25 @@ Your new AI assistant that can dynamically change its personality based on your 
 
 ## 🎯 Supported Personalities
 
-### Predefined Personalities
-- **🩺 Doctor**: Medical assistant with health expertise
-- **⚖️ Lawyer**: Legal assistant with law knowledge
-- **📞 Receptionist**: Administrative and organizational support
-- **📚 Teacher**: Educational guidance and learning support
-- **🧠 Therapist**: Emotional support and therapeutic guidance
+### Professional Commanding Personalities
+Each personality takes charge of conversations with professional authority and actively engages users through systematic questioning:
+
+- **🩺 Doctor**: Conducts medical consultations with diagnostic questioning, symptom assessment, and health recommendations
+- **⚖️ Lawyer**: Leads legal consultations gathering case details, analyzing situations, and providing strategic advice  
+- **📞 Receptionist**: Manages appointments and administrative tasks through organized questioning and efficient service
+- **📚 Teacher**: Conducts interactive lessons with knowledge testing, confidence assessment, and personalized feedback
+- **🧠 Therapist**: Guides therapeutic sessions through professional questioning and emotional support techniques
+- **💼 HR Manager**: Conducts structured interviews with behavioral questions and comprehensive candidate evaluation
+
+### Interactive Professional Behaviors
+All personalities demonstrate commanding professional conduct:
+- **Take Charge**: Lead conversations instead of waiting for user direction
+- **Active Questioning**: Immediately ask relevant questions to gather comprehensive information
+- **Professional Assessment**: Evaluate responses and provide expert feedback
+- **Role-Specific Interactions**: Engage in activities typical of their profession (tests, interviews, consultations)
 
 ### Custom Personalities
-Create any specialized assistant by simply describing the role:
+Create any specialized professional by describing the role. Custom personalities automatically adopt commanding behavior:
 - Software Engineer
 - Chef
 - Personal Trainer

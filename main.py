@@ -121,12 +121,12 @@ with gr.Blocks() as demo:
         with gr.Column():
             gr.Markdown("## 🎭 Assistant Personality")
             personality_input = gr.Textbox(
-                label="What kind of assistant do you need?",
-                placeholder="E.g., doctor, lawyer, receptionist, teacher, therapist, or describe your own...",
+                label="What kind of professional do you need?",
+                placeholder="E.g., doctor, lawyer, teacher, hr, therapist, or any professional role...",
                 value="general assistant",
                 lines=1
             )
-            gr.Markdown("*Pre-defined personalities: doctor, lawyer, receptionist, teacher, therapist*")
+            gr.Markdown("*Professional personalities that actively engage: doctor, lawyer, receptionist, teacher, therapist, hr*")
 
     with gr.Row():
         # Left column - Webcam
