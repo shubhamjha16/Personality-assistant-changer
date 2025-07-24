@@ -7,13 +7,7 @@ from text_to_speech import text_to_speech_with_elevenlabs, text_to_speech_with_g
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 audio_filepath = "audio_question.mp3"
 
-# Global variable to store current personality
-current_personality = "general assistant"
-
-def process_audio_and_chat(personality_input):
-    global current_personality
-    current_personality = personality_input if personality_input.strip() else "general assistant"
-    
+def process_audio_and_chat():
     chat_history = []
     while True:
         try:
@@ -23,7 +17,7 @@ def process_audio_and_chat(personality_input):
             if "goodbye" in user_input.lower():
                 break
 
-            response = ask_agent(user_query=user_input, personality_type=current_personality)
+            response = ask_agent(user_query=user_input)
 
             voice_of_doctor = text_to_speech_with_elevenlabs(input_text=response, output_filepath="final.mp3")
 
@@ -34,20 +28,6 @@ def process_audio_and_chat(personality_input):
         except Exception as e:
             print(f"Error in continuous recording: {e}")
             break
-
-def process_text_chat(message, chat_history, personality_input):
-    """Process text-based chat messages"""
-    global current_personality
-    current_personality = personality_input if personality_input.strip() else "general assistant"
-    
-    if message.strip():
-        try:
-            response = ask_agent(user_query=message, personality_type=current_personality)
-            chat_history.append([message, response])
-        except Exception as e:
-            chat_history.append([message, f"Error: {str(e)}"])
-    
-    return "", chat_history
 
 # Code for frontend
 import cv2
@@ -114,19 +94,7 @@ def get_webcam_frame():
 # Setup UI
 
 with gr.Blocks() as demo:
-    gr.Markdown("<h1 style='color: orange; text-align: center;  font-size: 4em;'> 🤖 Your Personal AI Assistant</h1>")
-    
-    # Personality Configuration Section
-    with gr.Row():
-        with gr.Column():
-            gr.Markdown("## 🎭 Assistant Personality")
-            personality_input = gr.Textbox(
-                label="What kind of professional do you need?",
-                placeholder="E.g., doctor, lawyer, teacher, hr, therapist, or any professional role...",
-                value="general assistant",
-                lines=1
-            )
-            gr.Markdown("*Professional personalities that actively engage: doctor, lawyer, receptionist, teacher, therapist, hr*")
+    gr.Markdown("<h1 style='color: orange; text-align: center;  font-size: 4em;'> 👧🏼 Dora – Your Personal AI Assistant</h1>")
 
     with gr.Row():
         # Left column - Webcam
@@ -154,23 +122,13 @@ with gr.Blocks() as demo:
             
             chatbot = gr.Chatbot(
                 label="Conversation",
-                height=350,
+                height=400,
                 show_label=False
             )
             
-            # Text input for manual chat
-            with gr.Row():
-                text_input = gr.Textbox(
-                    placeholder="Type your message here...",
-                    lines=1,
-                    scale=4
-                )
-                send_btn = gr.Button("Send", variant="primary", scale=1)
-            
-            gr.Markdown("*🎤 Or use continuous listening mode by clicking 'Start Voice Chat' below*")
+            gr.Markdown("*🎤 Continuous listening mode is active - speak anytime!*")
             
             with gr.Row():
-                start_voice_btn = gr.Button("Start Voice Chat", variant="primary")
                 clear_btn = gr.Button("Clear Chat", variant="secondary")
     
     # Event handlers
@@ -190,28 +148,14 @@ with gr.Blocks() as demo:
         show_progress=False  # Hide progress indicator for smoother experience
     )
     
-    # Text chat functionality
-    text_input.submit(
-        fn=process_text_chat,
-        inputs=[text_input, chatbot, personality_input],
-        outputs=[text_input, chatbot]
-    )
-    
-    send_btn.click(
-        fn=process_text_chat,
-        inputs=[text_input, chatbot, personality_input],
-        outputs=[text_input, chatbot]
-    )
-    
     clear_btn.click(
         fn=lambda: [],
         outputs=chatbot
     )
     
-    # Voice chat functionality
-    start_voice_btn.click(
+    # Auto-start continuous mode when the app loads
+    demo.load(
         fn=process_audio_and_chat,
-        inputs=[personality_input],
         outputs=chatbot
     )
 
