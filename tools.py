@@ -32,6 +32,7 @@ def analyze_image_with_query(query: str) -> str:
     Expects a string with 'query'.
     Captures the image and sends the query and the image to
     to Groq's vision chat API and returns the analysis.
+    Enhanced to provide detailed observations for compliments.
     """
     img_b64 = capture_image()
     model="meta-llama/llama-4-maverick-17b-128e-instruct"
@@ -40,13 +41,28 @@ def analyze_image_with_query(query: str) -> str:
         return "Error: both 'query' and 'image' fields required."
 
     client=Groq()  
+    
+    # Enhanced prompt to encourage detailed positive observations
+    enhanced_query = f"""
+    {query}
+    
+    Please provide detailed observations about:
+    - The person's appearance, clothing style, and professional presentation
+    - Any positive qualities or attractive features you notice
+    - Their expression, confidence, or energy that comes through
+    - The background or environment that might indicate their interests
+    - Overall impression of their style, professionalism, or personality
+    
+    Be specific and positive in your observations while being genuine and appropriate.
+    """
+    
     messages=[
         {
             "role": "user",
             "content": [
                 {
                     "type": "text", 
-                    "text": query
+                    "text": enhanced_query
                 },
                 {
                     "type": "image_url",

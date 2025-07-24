@@ -155,7 +155,8 @@ with gr.Blocks() as demo:
             chatbot = gr.Chatbot(
                 label="Conversation",
                 height=350,
-                show_label=False
+                show_label=False,
+                type='messages'
             )
             
             # Text input for manual chat
@@ -216,6 +217,8 @@ with gr.Blocks() as demo:
     )
 
 ## Launch the app
+app = demo
+
 if __name__ == "__main__":
     demo.launch(
         server_name="0.0.0.0",

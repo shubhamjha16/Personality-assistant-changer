@@ -5,29 +5,33 @@ Your new AI assistant that can dynamically change its personality based on your 
 ## ✨ Key Features
 
 - **🎭 Dynamic Personality System**: Switch between different assistant personalities on demand
-- **🎥 Real-time Webcam Integration**: Visual analysis capabilities through webcam
+- **😊 Enthusiastic & Complimentary**: AI that genuinely compliments your appearance, style, and professional qualities
+- **🎥 Real-time Webcam Integration**: Visual analysis capabilities with appearance-based compliments
 - **🎙️ Voice Interaction**: Speak naturally and get audio responses
 - **💬 Text Chat**: Type messages for quick interactions
 - **🔧 Customizable Roles**: Use predefined personalities or create your own
+- **⚡ Vercel Deployment Ready**: Easy cloud deployment with included configuration
 
 ## 🎯 Supported Personalities
 
 ### Professional Commanding Personalities
-Each personality takes charge of conversations with professional authority and actively engages users through systematic questioning:
+Each personality takes charge of conversations with professional authority and actively engages users through systematic questioning, while being enthusiastic and complimentary:
 
-- **🩺 Doctor**: Conducts medical consultations with diagnostic questioning, symptom assessment, and health recommendations
-- **⚖️ Lawyer**: Leads legal consultations gathering case details, analyzing situations, and providing strategic advice  
-- **📞 Receptionist**: Manages appointments and administrative tasks through organized questioning and efficient service
-- **📚 Teacher**: Conducts interactive lessons with knowledge testing, confidence assessment, and personalized feedback
-- **🧠 Therapist**: Guides therapeutic sessions through professional questioning and emotional support techniques
-- **💼 HR Manager**: Conducts structured interviews with behavioral questions and comprehensive candidate evaluation
+- **🩺 Doctor**: Conducts medical consultations with diagnostic questioning, symptom assessment, health recommendations, and caring compliments about taking charge of health
+- **⚖️ Lawyer**: Leads legal consultations gathering case details, analyzing situations, providing strategic advice, and appreciating client intelligence and preparation  
+- **📞 Receptionist**: Manages appointments and administrative tasks through organized questioning, efficient service, and warm welcomes with appearance compliments
+- **📚 Teacher**: Conducts interactive lessons with knowledge testing, confidence assessment, personalized feedback, and enthusiastic encouragement about learning dedication
+- **🧠 Therapist**: Guides therapeutic sessions through professional questioning, emotional support techniques, and genuine compliments about courage in seeking help
+- **💼 HR Manager**: Conducts structured interviews with behavioral questions, comprehensive candidate evaluation, balanced feedback including both strengths and areas for improvement
 
 ### Interactive Professional Behaviors
-All personalities demonstrate commanding professional conduct:
+All personalities demonstrate commanding professional conduct with enthusiasm:
 - **Take Charge**: Lead conversations instead of waiting for user direction
 - **Active Questioning**: Immediately ask relevant questions to gather comprehensive information
 - **Professional Assessment**: Evaluate responses and provide expert feedback
 - **Role-Specific Interactions**: Engage in activities typical of their profession (tests, interviews, consultations)
+- **Enthusiastic Compliments**: Use webcam to give genuine compliments about appearance, style, and professional presentation
+- **Genuine Interest**: Show authentic care about the person's goals, background, and wellbeing
 
 ### Custom Personalities
 Create any specialized professional by describing the role. Custom personalities automatically adopt commanding behavior:
@@ -49,6 +53,8 @@ Make sure you have the following API keys set up as environment variables:
 
 ### Installation
 
+**Option A: Local Development**
+
 1. **Clone the repository:**
 ```bash
 git clone https://github.com/shubhamjha16/Personality-assistant-changer.git
@@ -57,15 +63,15 @@ cd Personality-assistant-changer
 
 2. **Install dependencies:**
 
-**Option A: Using UV (Recommended)**
+**Using UV (Recommended)**
 ```bash
 # Setup UV if not already: https://www.youtube.com/watch?v=Dgf7Lp0B_hI
 uv sync
 ```
 
-**Option B: Using pip**
+**Using pip**
 ```bash
-pip install elevenlabs gradio groq gtts langchain-google-genai langgraph opencv-python pydub python-dotenv speechrecognition
+pip install -r requirements.txt
 ```
 
 3. **Set up environment variables:**
@@ -80,6 +86,20 @@ GOOGLE_API_KEY=your_google_api_key_here
 ```bash
 python main.py
 ```
+
+**Option B: Deploy to Vercel**
+
+1. **Deploy to Vercel:**
+   - Fork this repository
+   - Connect to Vercel
+   - Add environment variables in Vercel dashboard:
+     - `GROQ_API_KEY`
+     - `ELEVENLABS_API_KEY` 
+     - `GOOGLE_API_KEY`
+   - Deploy automatically
+
+2. **Vercel Configuration:**
+   The repository includes `vercel.json` and `requirements.txt` for seamless deployment.
 
 ## 🎮 How to Use
 
