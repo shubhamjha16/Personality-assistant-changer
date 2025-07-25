@@ -1,0 +1,76 @@
+## Agent Hierarchy and Workflow
+
+This document outlines the architecture of the multi-agent system, detailing the hierarchy of agents and their interactions.
+
+### 1. Hierarchical Supervisor
+
+The `HierarchicalSupervisor` is the central orchestrator of the system. It sits at the top of the hierarchy and is responsible for:
+
+- **Task Routing:** Receiving tasks from Persona Agents and delegating them to the appropriate Platform-Specific Supervisor based on the task type.
+- **Workflow Orchestration:** Managing the execution of tasks in either serial or parallel mode.
+- **Sub-task Creation:** Breaking down complex tasks into smaller, manageable sub-tasks.
+- **Platform Agent Registration:** Registering and managing all platform-specific agents.
+
+### 2. Persona Agents
+
+`PersonaAgent`s are the user-facing layer of the system. They are responsible for:
+
+- **Interpreting User Intent:** Understanding natural language from users and translating it into actionable tasks.
+- **Generating Conversational Responses:** Interacting with users in a manner consistent with their assigned persona (e.g., HR Manager, IT Support, Doctor).
+- **Task Creation:** Creating `Task` objects that are sent to the `HierarchicalSupervisor` for execution.
+
+**Examples of Persona Agents:**
+
+- `HRManagerAgent`: Handles onboarding, HR-related queries.
+- `ITSupportAgent`: Manages technical support tickets and software requests.
+- `DoctorAgent`: Provides medical consultations and health-related advice.
+
+### 3. Platform-Specific Supervisors
+
+`PlatformAgent`s are specialized supervisors that manage all interactions with a specific external platform or service. Their responsibilities include:
+
+- **Authentication:** Managing credentials and authenticating with their respective platform's API.
+- **Connection Testing:** Verifying the connection to the platform.
+- **Sub-Agent Management:** Managing a pool of `SubAgent`s that perform specific tasks on the platform.
+- **Task Delegation:** Receiving tasks from the `HierarchicalSupervisor` and delegating them to the appropriate `SubAgent`.
+
+**Examples of Platform Agents:**
+
+- `GitHubPlatformAgent`: Manages all GitHub-related tasks.
+- `GmailPlatformAgent`: Manages all email-related tasks.
+- `JiraPlatformAgent`: Manages all Jira-related tasks.
+- `CalendarPlatformAgent`: Manages all calendar and scheduling tasks.
+
+### 4. Sub-Agents
+
+`SubAgent`s are the workhorses of the system. They are highly specialized agents that perform a single, well-defined task. Their key characteristics are:
+
+- **Task-Specific:** Each `SubAgent` is designed to handle one or a few closely related task types.
+- **Platform-Bound:** They operate within the context of their parent `PlatformAgent`.
+- **Execution:** They contain the logic to execute a task, such as making an API call.
+
+**Examples of Sub-Agents:**
+
+- `GitHubIssueAgent`: Creates, updates, and lists GitHub issues.
+- `EmailSenderAgent`: Sends and schedules emails.
+- `JiraTicketAgent`: Creates and manages Jira tickets.
+- `CalendarSchedulerAgent`: Schedules meetings and calendar events.
+
+### 5. Reflection Agent
+
+The `ReflectionAgent` provides a layer of introspection and quality control. It is responsible for:
+
+- **Evaluating Task Completion:** Assessing whether a task was completed successfully and to a high standard.
+- **Identifying Issues:** Detecting problems in task execution or outcomes.
+- **Generating Follow-up Actions:** Creating new tasks to address issues or perform necessary follow-up actions (e.g., sending a confirmation email).
+- **Identifying Improvement Opportunities:** Analyzing task history to suggest optimizations and improvements to workflows.
+
+## Tools Analysis
+
+The `tools.py` file is not provided in the codebase, so I cannot analyze the tools. However, based on the agent implementations, the system likely uses tools for:
+
+- **API Interaction:** Making HTTP requests to external services like GitHub, Gmail, and Jira. The `requests` library is used for this.
+- **Environment Variable Access:** Accessing sensitive information like API tokens from environment variables using `os.getenv`.
+- **UUID Generation:** Creating unique IDs for tasks and other objects using the `uuid` library.
+- **Regular Expressions:** Parsing user input and identifying keywords and patterns using the `re` library.
+- **AI Model Interaction:** The `personas.py` file indicates an optional dependency on an `ai_agent` module, which would be used to generate conversational responses. This would involve a tool to interact with a large language model.
