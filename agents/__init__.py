@@ -1,0 +1,1 @@
+# Agents package for modular AI assistant system
