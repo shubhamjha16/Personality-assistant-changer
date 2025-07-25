@@ -9,6 +9,12 @@ from typing import Dict, List, Any, Optional
 import uuid
 from datetime import datetime
 
+import sys
+import os
+
+# Add the project root to the path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
+
 # Import our agent system
 from agents.base import Task, TaskStatus, TaskPriority, AgentResponse
 from agents.supervisor import HierarchicalSupervisor  
